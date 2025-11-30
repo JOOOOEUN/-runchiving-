@@ -15,6 +15,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
 import { ImageUpload } from "@/components/image-upload"
+import { parseDistances } from "@/lib/distance-utils"
 
 interface RecordFormProps {
   registrations: any[]
@@ -43,6 +44,7 @@ const calculatePace = (hours: string, minutes: string, seconds: string, distance
 export function RecordForm({ registrations, preselectedRegistrationId }: RecordFormProps) {
   const [mode, setMode] = useState<"registration" | "manual">(preselectedRegistrationId ? "registration" : "manual")
   const [registrationId, setRegistrationId] = useState(preselectedRegistrationId || "")
+  const [selectedDistance, setSelectedDistance] = useState("")
 
   // Manual entry fields
   const [raceName, setRaceName] = useState("")
@@ -58,6 +60,7 @@ export function RecordForm({ registrations, preselectedRegistrationId }: RecordF
   const [notes, setNotes] = useState("")
   const [photoUrl, setPhotoUrl] = useState("")
   const [medalPhotoUrl, setMedalPhotoUrl] = useState("")
+  const [certificatePhotoUrl, setCertificatePhotoUrl] = useState("")
   const [isPublic, setIsPublic] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -89,17 +92,43 @@ export function RecordForm({ registrations, preselectedRegistrationId }: RecordF
           return
         }
 
-        const pace = calculatePace(hours, minutes, seconds, selectedReg.race.distance)
+        // 중복 체크: 같은 대회에 이미 기록이 있는지 확인
+        const { data: existingRecord } = await supabase
+          .from("records")
+          .select("id")
+          .eq("user_id", user.id)
+          .eq("race_id", selectedReg.race_id)
+          .single()
+
+        if (existingRecord) {
+          alert("이미 이 대회에 기록이 등록되어 있습니다.")
+          setIsLoading(false)
+          return
+        }
+
+        // 여러 거리가 있는 대회인 경우 선택된 거리 사용
+        const distances = parseDistances(selectedReg.race.distance)
+        const finalDistance = distances.length > 1 ? selectedDistance : distances[0] || selectedReg.race.distance
+
+        if (distances.length > 1 && !selectedDistance) {
+          alert("참가 코스를 선택해주세요")
+          setIsLoading(false)
+          return
+        }
+
+        const pace = calculatePace(hours, minutes, seconds, finalDistance)
 
         const { error } = await supabase.from("records").insert({
           user_id: user.id,
           registration_id: registrationId,
           race_id: selectedReg.race_id,
+          distance: finalDistance,
           finish_time: finishTime,
           pace: pace,
           position: position ? Number.parseInt(position) : null,
           photo_url: photoUrl || null,
           medal_photo_url: medalPhotoUrl || null,
+          certificate_photo_url: certificatePhotoUrl || null,
           notes: notes || null,
           completed_at: selectedReg.race.date,
           is_public: isPublic,
@@ -133,11 +162,13 @@ export function RecordForm({ registrations, preselectedRegistrationId }: RecordF
         const { error: recordError } = await supabase.from("records").insert({
           user_id: user.id,
           race_id: newRace.id,
+          distance: distance,
           finish_time: finishTime,
           pace: pace,
           position: position ? Number.parseInt(position) : null,
           photo_url: photoUrl || null,
           medal_photo_url: medalPhotoUrl || null,
+          certificate_photo_url: certificatePhotoUrl || null,
           notes: notes || null,
           completed_at: raceDate,
           is_public: isPublic,
@@ -146,12 +177,11 @@ export function RecordForm({ registrations, preselectedRegistrationId }: RecordF
         if (recordError) throw recordError
       }
 
-      router.push("/dashboard/records")
-      router.refresh()
+      // 성공 시 페이지 이동
+      window.location.href = "/dashboard/records"
     } catch (error) {
       console.error("Submit error:", error)
       alert("기록 추가 중 오류가 발생했습니다.")
-    } finally {
       setIsLoading(false)
     }
   }
@@ -183,7 +213,19 @@ export function RecordForm({ registrations, preselectedRegistrationId }: RecordF
             <TabsContent value="registration" className="mt-4 space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="registration">대회 선택</Label>
-                <Select value={registrationId} onValueChange={setRegistrationId}>
+                <Select value={registrationId} onValueChange={(value) => {
+                  setRegistrationId(value)
+                  // 대회 선택 시 거리 옵션 초기화
+                  const selectedReg = registrations.find((r) => r.id === value)
+                  if (selectedReg) {
+                    const distances = parseDistances(selectedReg.race.distance)
+                    if (distances.length === 1) {
+                      setSelectedDistance(distances[0])
+                    } else {
+                      setSelectedDistance("")
+                    }
+                  }
+                }}>
                   <SelectTrigger>
                     <SelectValue placeholder="대회를 선택하세요" />
                   </SelectTrigger>
@@ -196,6 +238,31 @@ export function RecordForm({ registrations, preselectedRegistrationId }: RecordF
                   </SelectContent>
                 </Select>
               </div>
+
+              {/* 코스 선택 (거리가 여러 개인 경우) */}
+              {registrationId && (() => {
+                const selectedReg = registrations.find((r) => r.id === registrationId)
+                if (!selectedReg) return null
+                const distances = parseDistances(selectedReg.race.distance)
+                if (distances.length <= 1) return null
+                return (
+                  <div className="space-y-2">
+                    <Label htmlFor="selectedDistance">참가 코스 선택 *</Label>
+                    <Select value={selectedDistance} onValueChange={setSelectedDistance}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="참가한 코스를 선택하세요" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {distances.map((d) => (
+                          <SelectItem key={d} value={d}>
+                            {d}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )
+              })()}
             </TabsContent>
 
             <TabsContent value="manual" className="mt-4 space-y-4">
@@ -310,6 +377,12 @@ export function RecordForm({ registrations, preselectedRegistrationId }: RecordF
                 onChange={setMedalPhotoUrl}
                 folder="medals"
                 label="메달 사진"
+              />
+              <ImageUpload
+                value={certificatePhotoUrl}
+                onChange={setCertificatePhotoUrl}
+                folder="certificates"
+                label="기록증 사진"
               />
               <ImageUpload
                 value={photoUrl}

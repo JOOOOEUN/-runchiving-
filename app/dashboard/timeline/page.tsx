@@ -2,67 +2,35 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { TrendingUp, TrendingDown, Minus, Trophy, Calendar, BarChart3 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { redirect } from "next/navigation"
+import { createClient } from "@/lib/supabase/server"
 
-// Mock Data for Timeline & Stats
-const MOCK_RECORDS = [
-  {
-    id: "1",
-    finish_time: "04:56:29",
-    completed_at: "2025-10-26T10:00:00Z",
-    race: {
-      name: "2025 춘천마라톤",
-      distance: "Full",
-      date: "2025-10-26",
-    },
-  },
-  {
-    id: "2",
-    finish_time: "00:56:42",
-    completed_at: "2025-10-19T09:00:00Z",
-    race: {
-      name: "2025 STYLE RUN",
-      distance: "10K",
-      date: "2025-10-19",
-    },
-  },
-  {
-    id: "3",
-    finish_time: "01:45:20",
-    completed_at: "2024-10-13T08:00:00Z",
-    race: {
-      name: "2024 서울달리기",
-      distance: "Half",
-      date: "2024-10-13",
-    },
-  },
-  {
-    id: "4",
-    finish_time: "00:58:10",
-    completed_at: "2024-03-17T08:00:00Z",
-    race: {
-      name: "2024 서울마라톤",
-      distance: "10K",
-      date: "2024-03-17",
-    },
-  },
-  {
-    id: "5",
-    finish_time: "02:05:15",
-    completed_at: "2023-11-05T08:00:00Z",
-    race: {
-      name: "2023 JTBC 서울 마라톤",
-      distance: "Half",
-      date: "2023-11-05",
-    },
-  },
-]
+interface RecordWithRace {
+  id: string
+  finish_time: string
+  completed_at: string
+  distance: string | null
+  race: {
+    name: string
+    distance: string
+    date: string
+  } | null
+}
 
 export default async function TimelinePage() {
-  // const supabase = await createClient()
-  // const { data: { user } } = await supabase.auth.getUser()
-  // if (!user) redirect("/auth/login")
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
 
-  const records = MOCK_RECORDS
+  if (!user) {
+    redirect("/auth/login")
+  }
+
+  // Fetch user's records with race info
+  const { data: records } = await supabase
+    .from("records")
+    .select("id, finish_time, completed_at, distance, race:races(name, distance, date)")
+    .eq("user_id", user.id)
+    .order("completed_at", { ascending: false })
 
   const formatTime = (interval: string) => {
     const match = interval.match(/(\d+):(\d+):(\d+)/)
@@ -78,21 +46,38 @@ export default async function TimelinePage() {
     return Number.parseInt(hours) * 3600 + Number.parseInt(minutes) * 60 + Number.parseInt(seconds)
   }
 
+  // 거리 정규화 함수
+  const normalizeDistance = (distance: string | null | undefined): string => {
+    if (!distance) return "기타"
+    const d = distance.toLowerCase()
+    if (d === "full" || d === "풀코스" || d === "풀" || d.includes("42")) return "Full"
+    if (d === "half" || d === "하프" || d.includes("21")) return "Half"
+    if (d === "10k" || d.includes("10")) return "10K"
+    if (d === "5k" || d.includes("5")) return "5K"
+    if (d === "울트라" || d.includes("ultra") || d.includes("50") || d.includes("100")) return "Ultra"
+    return distance
+  }
+
+  // 기록의 실제 거리 가져오기 (record.distance 우선, 없으면 race.distance)
+  const getRecordDistance = (record: RecordWithRace): string => {
+    return normalizeDistance(record.distance || record.race?.distance)
+  }
+
   // Group records by year
-  const recordsByYear: Record<string, typeof records> = {}
+  const recordsByYear: Record<string, RecordWithRace[]> = {}
   records?.forEach((record) => {
     const year = new Date(record.completed_at).getFullYear().toString()
     if (!recordsByYear[year]) {
       recordsByYear[year] = []
     }
-    recordsByYear[year].push(record)
+    recordsByYear[year].push(record as RecordWithRace)
   })
 
   // Calculate stats per year
   const yearStats = Object.entries(recordsByYear).map(([year, yearRecords]) => {
     const totalRaces = yearRecords.length
-    const fullMarathons = yearRecords.filter((r) => r.race.distance === "Full")
-    const halfMarathons = yearRecords.filter((r) => r.race.distance === "Half")
+    const fullMarathons = yearRecords.filter((r) => getRecordDistance(r) === "Full")
+    const halfMarathons = yearRecords.filter((r) => getRecordDistance(r) === "Half")
 
     // Calculate average time for full marathons
     let avgFullTime = null
@@ -126,13 +111,16 @@ export default async function TimelinePage() {
     return `${h}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`
   }
 
+  // Sort by year ascending for improvement calculation
+  const sortedYearStats = [...yearStats].sort((a, b) => Number(a.year) - Number(b.year))
+
   // Calculate improvement from previous year
-  const statsWithImprovement = yearStats.map((stat, index) => {
+  const statsWithImprovement = sortedYearStats.map((stat, index) => {
     if (index === 0 || !stat.avgFullTime) {
       return { ...stat, improvement: null }
     }
 
-    const prevYear = yearStats[index - 1]
+    const prevYear = sortedYearStats[index - 1]
     if (!prevYear.avgFullTime) {
       return { ...stat, improvement: null }
     }
@@ -150,6 +138,9 @@ export default async function TimelinePage() {
     }
   })
 
+  // Reverse for display (newest first)
+  const displayStats = [...statsWithImprovement].reverse()
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto max-w-6xl px-4 py-8">
@@ -165,9 +156,9 @@ export default async function TimelinePage() {
           </TabsList>
 
           <TabsContent value="timeline" className="mt-6">
-            {statsWithImprovement.length > 0 ? (
+            {displayStats.length > 0 ? (
               <div className="space-y-8">
-                {statsWithImprovement.reverse().map((yearStat) => (
+                {displayStats.map((yearStat) => (
                   <Card key={yearStat.year}>
                     <CardHeader>
                       <div className="flex items-center justify-between">
@@ -235,7 +226,7 @@ export default async function TimelinePage() {
                                   <Trophy className="h-5 w-5 text-primary" />
                                 </div>
                                 <div>
-                                  <p className="font-medium">{record.race.name}</p>
+                                  <p className="font-medium">{record.race?.name || "대회명 없음"}</p>
                                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                     <Calendar className="h-3 w-3" />
                                     {new Date(record.completed_at).toLocaleDateString("ko-KR", {
@@ -248,7 +239,7 @@ export default async function TimelinePage() {
                               <div className="text-right">
                                 <p className="font-mono font-semibold">{formatTime(record.finish_time)}</p>
                                 <Badge variant="outline" className="mt-1">
-                                  {record.race.distance}
+                                  {getRecordDistance(record)}
                                 </Badge>
                               </div>
                             </div>
@@ -286,7 +277,7 @@ export default async function TimelinePage() {
                   <CardContent>
                     <div className="space-y-4">
                       {Object.entries(recordsByYear)
-                        .reverse()
+                        .sort(([a], [b]) => Number(b) - Number(a))
                         .map(([year, yearRecords]) => {
                           const maxRaces = Math.max(...Object.values(recordsByYear).map((r) => r.length))
                           const percentage = (yearRecords.length / maxRaces) * 100
@@ -322,9 +313,12 @@ export default async function TimelinePage() {
                     <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6">
                       {Array.from({ length: 12 }, (_, i) => {
                         const month = i + 1
+                        const oneYearAgo = new Date()
+                        oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1)
+
                         const monthRecords = records.filter((r) => {
                           const recordDate = new Date(r.completed_at)
-                          return recordDate.getMonth() + 1 === month
+                          return recordDate >= oneYearAgo && recordDate.getMonth() + 1 === month
                         })
 
                         return (
@@ -348,14 +342,20 @@ export default async function TimelinePage() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {["Full", "Half", "10K", "5K"].map((distance) => {
-                        const distanceRecords = records.filter((r) => r.race.distance === distance)
-                        const percentage = (distanceRecords.length / records.length) * 100
+                      {["Full", "Half", "10K", "5K", "Ultra"].map((distance) => {
+                        const distanceRecords = records.filter((r) => getRecordDistance(r as RecordWithRace) === distance)
+                        const percentage = records.length > 0 ? (distanceRecords.length / records.length) * 100 : 0
+
+                        if (distanceRecords.length === 0) return null
+
+                        const displayName = distance === "Full" ? "풀코스" :
+                                           distance === "Half" ? "하프" :
+                                           distance === "Ultra" ? "울트라" : distance
 
                         return (
                           <div key={distance} className="space-y-2">
                             <div className="flex items-center justify-between text-sm">
-                              <span className="font-medium">{distance}</span>
+                              <span className="font-medium">{displayName}</span>
                               <span className="text-muted-foreground">
                                 {distanceRecords.length}회 ({percentage.toFixed(0)}%)
                               </span>

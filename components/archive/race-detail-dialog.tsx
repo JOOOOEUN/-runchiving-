@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import {
   Dialog,
   DialogContent,
@@ -6,15 +9,29 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { MapPin, Timer, Wind, ChevronRight } from "lucide-react"
+import { MapPin, Timer, Wind, ChevronRight, Trash2, Pencil } from "lucide-react"
+import { createClient } from "@/lib/supabase/client"
+import { EditRecordDialog } from "./edit-record-dialog"
 
 interface RaceRecord {
   id: string
   raceName: string
   date: string
   distance: string
+  raceDistances: string
   finishTime: string
   pace: string
   position: number
@@ -26,8 +43,32 @@ interface RaceRecord {
 }
 
 export function RaceDetailDialog({ record }: { record: RaceRecord }) {
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [open, setOpen] = useState(false)
+
+  const handleDelete = async () => {
+    setIsDeleting(true)
+    const supabase = createClient()
+
+    try {
+      const { error } = await supabase
+        .from("records")
+        .delete()
+        .eq("id", record.id)
+
+      if (error) throw error
+
+      // 삭제 성공 시 페이지 새로고침
+      window.location.reload()
+    } catch (error) {
+      console.error("Delete error:", error)
+      alert("삭제 중 오류가 발생했습니다.")
+      setIsDeleting(false)
+    }
+  }
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm" className="h-8 px-2 text-xs hover:text-primary">
           상세보기 <ChevronRight className="ml-1 h-3 w-3" />
@@ -96,17 +137,17 @@ export function RaceDetailDialog({ record }: { record: RaceRecord }) {
                 <div className="grid grid-cols-2 gap-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">순위</span>
-                    <span className="font-medium">{record.position}위</span>
+                    <span className="font-medium">{record.position > 0 ? `${record.position}위` : "-"}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">날씨</span>
-                    <span className="font-medium">{record.weather}</span>
+                    <span className="font-medium">{record.weather || "-"}</span>
                   </div>
                 </div>
               </div>
 
               {/* Placeholder for Comparison Graph */}
-              <div className="mt-auto pt-4">
+              <div className="pt-4">
                 <h4 className="mb-2 text-sm font-medium text-muted-foreground">기록 비교</h4>
                 <div className="h-24 w-full rounded-lg bg-muted/30 p-2 flex items-end justify-between gap-2">
                   {/* Mock Graph Bars */}
@@ -119,6 +160,41 @@ export function RaceDetailDialog({ record }: { record: RaceRecord }) {
                   <span>'23</span>
                   <span>'24</span>
                 </div>
+              </div>
+
+              {/* 수정/삭제 버튼 */}
+              <div className="pt-4 border-t border-border/50 space-y-2">
+                <EditRecordDialog record={record} />
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full text-destructive hover:text-destructive hover:bg-destructive/10"
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      기록 삭제
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>기록을 삭제하시겠습니까?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        "{record.raceName}" 기록이 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>취소</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={handleDelete}
+                        disabled={isDeleting}
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      >
+                        {isDeleting ? "삭제 중..." : "삭제"}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </div>
           </div>

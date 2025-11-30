@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { MapPin, ExternalLink, ImageIcon } from "lucide-react"
+import { PersonStanding, ExternalLink, ImageIcon } from "lucide-react"
 import type { Race } from "@/lib/types"
 import Link from "next/link"
 import Image from "next/image"
@@ -77,7 +77,7 @@ export function RaceCard({ race }: RaceCardProps) {
                   </div>
                 )}
               </div>
-              <p className="text-sm text-muted-foreground">기간 {formattedDate}</p>
+              <p className="text-sm text-muted-foreground">일정 {formattedDate}</p>
               <p className="text-sm text-muted-foreground">장소 {race.location}</p>
             </div>
           </div>
@@ -86,7 +86,7 @@ export function RaceCard({ race }: RaceCardProps) {
             <div className="flex gap-2">
               <Button variant="outline" size="sm" className="flex-1 gap-1 text-xs bg-transparent" asChild>
                 <Link href={`/races/${race.id}`}>
-                  <MapPin className="h-3 w-3" />
+                  <PersonStanding className="h-3 w-3" />
                   상세보기
                 </Link>
               </Button>
@@ -94,7 +94,7 @@ export function RaceCard({ race }: RaceCardProps) {
                 <Button size="sm" className="flex-1 gap-1 text-xs" asChild>
                   <a href={race.registration_url} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="h-3 w-3" />
-                    신청하기
+                    공식 홈페이지
                   </a>
                 </Button>
               )}

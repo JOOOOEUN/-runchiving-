@@ -14,8 +14,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Plus, Loader2 } from "lucide-react"
+import { Plus, Loader2, Check } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 
 export function SubmitRaceDialog() {
@@ -103,33 +102,55 @@ export function SubmitRaceDialog() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="date">대회 날짜 *</Label>
-              <Input
-                id="date"
-                type="date"
-                value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="distance">거리 *</Label>
-              <Select
-                value={formData.distance}
-                onValueChange={(value) => setFormData({ ...formData, distance: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="거리 선택" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="5K">5K</SelectItem>
-                  <SelectItem value="10K">10K</SelectItem>
-                  <SelectItem value="하프">하프 (21.0975K)</SelectItem>
-                  <SelectItem value="풀코스">풀코스 (42.195K)</SelectItem>
-                  <SelectItem value="울트라">울트라 (50K+)</SelectItem>
-                </SelectContent>
-              </Select>
+          <div className="grid gap-2">
+            <Label htmlFor="date">대회 날짜 *</Label>
+            <Input
+              id="date"
+              type="date"
+              value={formData.date}
+              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            />
+          </div>
+
+          <div className="grid gap-2">
+            <Label>거리 * (복수 선택 가능)</Label>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { value: "5K", label: "5K" },
+                { value: "10K", label: "10K" },
+                { value: "Half", label: "하프" },
+                { value: "Full", label: "풀코스" },
+                { value: "Ultra", label: "울트라" },
+              ].map((option) => {
+                const distances = formData.distance.split(", ").filter(Boolean)
+                const isChecked = distances.includes(option.value)
+
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => {
+                      let newDistances: string[]
+                      if (isChecked) {
+                        newDistances = distances.filter((d) => d !== option.value)
+                      } else {
+                        newDistances = [...distances, option.value]
+                      }
+                      const order = ["5K", "10K", "Half", "Full", "Ultra"]
+                      newDistances.sort((a, b) => order.indexOf(a) - order.indexOf(b))
+                      setFormData({ ...formData, distance: newDistances.join(", ") })
+                    }}
+                    className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition-colors ${
+                      isChecked
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border hover:border-primary hover:bg-muted"
+                    }`}
+                  >
+                    {isChecked && <Check className="h-3 w-3" />}
+                    {option.label}
+                  </button>
+                )
+              })}
             </div>
           </div>
 

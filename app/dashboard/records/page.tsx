@@ -4,7 +4,7 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { HallOfFame } from "@/components/archive/hall-of-fame"
-import { RaceArchiveCard } from "@/components/archive/race-archive-card"
+import { RecordsViewSwitcher } from "@/components/archive/records-view-switcher"
 
 export default async function RecordsPage() {
   const supabase = await createClient()
@@ -62,12 +62,13 @@ export default async function RecordsPage() {
     id: record.id,
     raceName: record.race?.name || "Unknown Race",
     date: record.completed_at || record.race?.date,
-    distance: record.race?.distance || "",
+    distance: record.distance || record.race?.distance?.split(", ")[0] || "",
+    raceDistances: record.race?.distance || "",
     finishTime: record.finish_time || "",
     pace: record.pace || "",
     position: record.position || 0,
     medalImage: record.medal_photo_url || "",
-    certificateImage: null,
+    certificateImage: record.certificate_photo_url || null,
     photos: record.photo_url ? [record.photo_url] : [],
     weather: "",
     location: record.race?.location || "",
@@ -112,11 +113,7 @@ export default async function RecordsPage() {
           </div>
 
           {transformedRecords.length > 0 ? (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {transformedRecords.map((record) => (
-                <RaceArchiveCard key={record.id} record={record} />
-              ))}
-            </div>
+            <RecordsViewSwitcher records={transformedRecords} />
           ) : (
             <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border/60 bg-muted/20 py-16">
               <div className="mb-4 rounded-full bg-muted p-4">

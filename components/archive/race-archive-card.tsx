@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -13,6 +13,7 @@ interface RaceRecord {
   raceName: string
   date: string
   distance: string
+  raceDistances: string
   finishTime: string
   pace: string
   position: number
@@ -23,8 +24,18 @@ interface RaceRecord {
   location: string
 }
 
-export function RaceArchiveCard({ record }: { record: RaceRecord }) {
-  const [activeTab, setActiveTab] = useState("medal")
+interface RaceArchiveCardProps {
+  record: RaceRecord
+  defaultTab?: "medal" | "certificate" | "photo"
+}
+
+export function RaceArchiveCard({ record, defaultTab = "medal" }: RaceArchiveCardProps) {
+  const [activeTab, setActiveTab] = useState(defaultTab)
+
+  // defaultTab이 변경되면 activeTab도 업데이트
+  useEffect(() => {
+    setActiveTab(defaultTab)
+  }, [defaultTab])
 
   return (
     <Card className="group overflow-hidden border-border/50 bg-card transition-all hover:border-primary/50 hover:shadow-md">
@@ -44,7 +55,7 @@ export function RaceArchiveCard({ record }: { record: RaceRecord }) {
       </CardHeader>
 
       <CardContent className="p-0">
-        <Tabs defaultValue="medal" className="w-full" onValueChange={setActiveTab}>
+        <Tabs value={activeTab} className="w-full" onValueChange={(v) => setActiveTab(v as "medal" | "certificate" | "photo")}>
           <div className="relative aspect-square w-full overflow-hidden bg-muted/50">
             <TabsContent value="medal" className="mt-0 h-full w-full">
               {record.medalImage ? (
@@ -83,7 +94,7 @@ export function RaceArchiveCard({ record }: { record: RaceRecord }) {
                 />
               )}
             </TabsContent>
-            <TabsContent value="photos" className="mt-0 h-full w-full">
+            <TabsContent value="photo" className="mt-0 h-full w-full">
               {record.photos.length > 0 ? (
                 <img
                   src={record.photos[0]}
@@ -116,7 +127,7 @@ export function RaceArchiveCard({ record }: { record: RaceRecord }) {
                 <span className="text-xs">기록증</span>
               </TabsTrigger>
               <TabsTrigger
-                value="photos"
+                value="photo"
                 className="h-8 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary"
               >
                 <ImageIcon className="mr-1 h-4 w-4" />

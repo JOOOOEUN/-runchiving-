@@ -7,7 +7,7 @@ import { SubmitRaceDialog } from "@/components/submit-race-dialog"
 export default async function RacesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ distance?: string; month?: string; sort?: string }>
+  searchParams: Promise<{ distance?: string; month?: string; sort?: string; region?: string }>
 }) {
   const params = await searchParams
   const supabase = await createClient()
@@ -16,9 +16,25 @@ export default async function RacesPage({
   const isAscending = params.sort === "desc"
   let query = supabase.from("races").select("*").order("date", { ascending: isAscending })
 
-  // Apply filters
+  // Apply distance filter
   if (params.distance) {
-    query = query.eq("distance", params.distance)
+    if (params.distance === "other") {
+      // 기타: Full, Half, 10K, 5K가 아닌 것들
+      query = query
+        .not("distance", "ilike", "%Full%")
+        .not("distance", "ilike", "%Half%")
+        .not("distance", "ilike", "%10K%")
+        .not("distance", "ilike", "%5K%")
+        .not("distance", "ilike", "%풀코스%")
+        .not("distance", "ilike", "%하프%")
+    } else {
+      query = query.ilike("distance", `%${params.distance}%`)
+    }
+  }
+
+  // Apply region filter
+  if (params.region) {
+    query = query.ilike("location", `%${params.region}%`)
   }
 
   if (params.month) {

@@ -21,17 +21,17 @@ export async function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden items-center gap-6 md:flex">
-          <Link href="/races" className="text-sm font-medium transition-colors hover:text-primary">
-            대회 일정
-          </Link>
-          <Link href="/explore" className="text-sm font-medium transition-colors hover:text-primary">
-            둘러보기
-          </Link>
           <Link href="/dashboard/records" className="text-sm font-medium transition-colors hover:text-primary">
             내 아카이브
           </Link>
           <Link href="/dashboard/timeline" className="text-sm font-medium transition-colors hover:text-primary">
             타임라인
+          </Link>
+          <Link href="/explore" className="text-sm font-medium transition-colors hover:text-primary">
+            둘러보기
+          </Link>
+          <Link href="/races" className="text-sm font-medium transition-colors hover:text-primary">
+            대회 일정
           </Link>
           {user ? (
             <form action="/auth/signout" method="post">
@@ -61,17 +61,17 @@ export async function Header() {
           </SheetTrigger>
           <SheetContent side="right">
             <nav className="flex flex-col gap-4">
-              <Link href="/races" className="text-sm font-medium transition-colors hover:text-primary">
-                대회 일정
-              </Link>
-              <Link href="/explore" className="text-sm font-medium transition-colors hover:text-primary">
-                둘러보기
-              </Link>
               <Link href="/dashboard/records" className="text-sm font-medium transition-colors hover:text-primary">
                 내 아카이브
               </Link>
               <Link href="/dashboard/timeline" className="text-sm font-medium transition-colors hover:text-primary">
                 타임라인
+              </Link>
+              <Link href="/explore" className="text-sm font-medium transition-colors hover:text-primary">
+                둘러보기
+              </Link>
+              <Link href="/races" className="text-sm font-medium transition-colors hover:text-primary">
+                대회 일정
               </Link>
               <Link
                 href="/dashboard/registrations"
