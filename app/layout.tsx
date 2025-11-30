@@ -9,9 +9,8 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "MODURUN(모두런) - 러너를 위한 올인원 플랫폼",
-  description: "마라톤 대회 정보, 신청 현황, 기록 관리를 한곳에서",
-  generator: "v0.app",
+  title: "Runchiving - 러너들의 메달 아카이브",
+  description: "마라톤 대회 정보, 기록 관리, 메달 아카이빙을 한곳에서",
   icons: {
     icon: [
       {
