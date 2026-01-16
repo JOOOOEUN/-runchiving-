@@ -1,14 +1,21 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation"
+import { useState, useEffect } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { ArrowDown, ArrowUp } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { ArrowDown, ArrowUp, Search, X } from "lucide-react"
 
 export function RaceFilters() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const currentSort = searchParams.get("sort") || "asc"
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "")
+
+  useEffect(() => {
+    setSearchQuery(searchParams.get("q") || "")
+  }, [searchParams])
 
   const handleFilterChange = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString())
@@ -20,6 +27,24 @@ export function RaceFilters() {
     router.push(`/races?${params.toString()}`)
   }
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    const params = new URLSearchParams(searchParams.toString())
+    if (searchQuery.trim()) {
+      params.set("q", searchQuery.trim())
+    } else {
+      params.delete("q")
+    }
+    router.push(`/races?${params.toString()}`)
+  }
+
+  const clearSearch = () => {
+    setSearchQuery("")
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete("q")
+    router.push(`/races?${params.toString()}`)
+  }
+
   const toggleSort = () => {
     const params = new URLSearchParams(searchParams.toString())
     params.set("sort", currentSort === "asc" ? "desc" : "asc")
@@ -27,30 +52,59 @@ export function RaceFilters() {
   }
 
   const clearFilters = () => {
+    setSearchQuery("")
     router.push("/races")
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-4">
-      {/* 정렬 토글 버튼 - 왼쪽 끝 */}
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={toggleSort}
-        className="gap-1.5"
-      >
-        {currentSort === "asc" ? (
-          <>
-            <ArrowDown className="h-4 w-4" />
-            최신순
-          </>
-        ) : (
-          <>
-            <ArrowUp className="h-4 w-4" />
-            과거순
-          </>
-        )}
-      </Button>
+    <div className="space-y-4">
+      {/* 검색 바 */}
+      <form onSubmit={handleSearch} className="flex gap-2">
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="대회명으로 검색..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 pr-10"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={clearSearch}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+        <Button type="submit" variant="default" size="default">
+          검색
+        </Button>
+      </form>
+
+      {/* 필터 옵션들 */}
+      <div className="flex flex-wrap items-center gap-4">
+        {/* 정렬 토글 버튼 - 왼쪽 끝 */}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={toggleSort}
+          className="gap-1.5"
+        >
+          {currentSort === "asc" ? (
+            <>
+              <ArrowDown className="h-4 w-4" />
+              최신순
+            </>
+          ) : (
+            <>
+              <ArrowUp className="h-4 w-4" />
+              과거순
+            </>
+          )}
+        </Button>
 
       <div className="flex items-center gap-2">
         <label className="text-sm font-medium">거리:</label>
@@ -131,11 +185,12 @@ export function RaceFilters() {
         </Select>
       </div>
 
-      {(searchParams.get("distance") || searchParams.get("month") || searchParams.get("region")) && (
-        <Button variant="outline" size="sm" onClick={clearFilters}>
-          필터 초기화
-        </Button>
-      )}
+        {(searchParams.get("distance") || searchParams.get("month") || searchParams.get("region") || searchParams.get("q")) && (
+          <Button variant="outline" size="sm" onClick={clearFilters}>
+            필터 초기화
+          </Button>
+        )}
+      </div>
     </div>
   )
 }

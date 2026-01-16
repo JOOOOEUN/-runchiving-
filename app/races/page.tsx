@@ -7,7 +7,7 @@ import { SubmitRaceDialog } from "@/components/submit-race-dialog"
 export default async function RacesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ distance?: string; month?: string; sort?: string; region?: string }>
+  searchParams: Promise<{ distance?: string; month?: string; sort?: string; region?: string; q?: string }>
 }) {
   const params = await searchParams
   const supabase = await createClient()
@@ -15,6 +15,11 @@ export default async function RacesPage({
   // 정렬: asc(기본) = 최신순(날짜 내림차순), desc = 과거순(날짜 오름차순)
   const isAscending = params.sort === "desc"
   let query = supabase.from("races").select("*").order("date", { ascending: isAscending })
+
+  // Apply search query
+  if (params.q) {
+    query = query.ilike("name", `%${params.q}%`)
+  }
 
   // Apply distance filter
   if (params.distance) {

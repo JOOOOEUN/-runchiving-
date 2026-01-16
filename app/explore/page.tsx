@@ -24,7 +24,7 @@ export default async function ExplorePage() {
     pace: record.pace || "",
     position: record.position || 0,
     medalImage: record.medal_photo_url || "",
-    certificateImage: null,
+    certificateImage: record.certificate_photo_url || null,
     photos: record.photo_url ? [record.photo_url] : [],
     weather: "",
     location: record.race?.location || "",

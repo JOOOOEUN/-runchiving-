@@ -50,9 +50,9 @@ export function ImageUpload({ value, onChange, folder, label }: ImageUploadProps
       const fileExt = file.name.split(".").pop()
       const fileName = `${user.id}/${folder}_${Date.now()}.${fileExt}`
 
-      // Supabase Storage에 업로드
+      // Supabase Storage에 업로드 (folder prop에 따라 동적으로 버킷 선택)
       const { data, error } = await supabase.storage
-        .from("medals")
+        .from(folder)
         .upload(fileName, file, {
           cacheControl: "3600",
           upsert: false,
@@ -62,7 +62,7 @@ export function ImageUpload({ value, onChange, folder, label }: ImageUploadProps
 
       // Public URL 가져오기
       const { data: { publicUrl } } = supabase.storage
-        .from("medals")
+        .from(folder)
         .getPublicUrl(data.path)
 
       setPreview(publicUrl)

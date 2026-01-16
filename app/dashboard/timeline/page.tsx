@@ -78,6 +78,8 @@ export default async function TimelinePage() {
     const totalRaces = yearRecords.length
     const fullMarathons = yearRecords.filter((r) => getRecordDistance(r) === "Full")
     const halfMarathons = yearRecords.filter((r) => getRecordDistance(r) === "Half")
+    const tenKRaces = yearRecords.filter((r) => getRecordDistance(r) === "10K")
+    const fiveKRaces = yearRecords.filter((r) => getRecordDistance(r) === "5K")
 
     // Calculate average time for full marathons
     let avgFullTime = null
@@ -98,6 +100,8 @@ export default async function TimelinePage() {
       totalRaces,
       fullMarathons: fullMarathons.length,
       halfMarathons: halfMarathons.length,
+      tenKRaces: tenKRaces.length,
+      fiveKRaces: fiveKRaces.length,
       avgFullTime,
       bestFullTime,
       records: yearRecords,
@@ -170,7 +174,7 @@ export default async function TimelinePage() {
                     </CardHeader>
                     <CardContent>
                       {/* Stats Grid */}
-                      <div className="mb-6 grid gap-4 md:grid-cols-3">
+                      <div className="mb-6 grid gap-4 grid-cols-2 md:grid-cols-5">
                         <div className="rounded-lg bg-muted p-4">
                           <p className="mb-1 text-sm text-muted-foreground">풀코스</p>
                           <p className="text-2xl font-bold">{yearStat.fullMarathons}회</p>
@@ -181,9 +185,19 @@ export default async function TimelinePage() {
                           <p className="text-2xl font-bold">{yearStat.halfMarathons}회</p>
                         </div>
 
+                        <div className="rounded-lg bg-muted p-4">
+                          <p className="mb-1 text-sm text-muted-foreground">10K</p>
+                          <p className="text-2xl font-bold">{yearStat.tenKRaces}회</p>
+                        </div>
+
+                        <div className="rounded-lg bg-muted p-4">
+                          <p className="mb-1 text-sm text-muted-foreground">5K</p>
+                          <p className="text-2xl font-bold">{yearStat.fiveKRaces}회</p>
+                        </div>
+
                         {yearStat.bestFullTime && (
                           <div className="rounded-lg bg-primary/10 p-4">
-                            <p className="mb-1 text-sm text-muted-foreground">풀코스 최고 기록</p>
+                            <p className="mb-1 text-sm text-muted-foreground">풀코스 PB</p>
                             <p className="font-mono text-2xl font-bold text-primary">
                               {secondsToTimeString(yearStat.bestFullTime)}
                             </p>
