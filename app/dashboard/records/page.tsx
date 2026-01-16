@@ -30,10 +30,11 @@ export default async function RecordsPage() {
 
     if (!records || records.length === 0) return pbs
 
-    const fullRecords = records.filter(r => r.race?.distance === "풀코스" || r.race?.distance === "Full")
-    const halfRecords = records.filter(r => r.race?.distance === "하프" || r.race?.distance === "Half")
-    const tenKRecords = records.filter(r => r.race?.distance === "10K")
-    const fiveKRecords = records.filter(r => r.race?.distance === "5K")
+    // record.distance를 사용 (개인이 실제 참가한 거리)
+    const fullRecords = records.filter(r => r.distance === "Full" || r.distance === "풀코스")
+    const halfRecords = records.filter(r => r.distance === "Half" || r.distance === "하프")
+    const tenKRecords = records.filter(r => r.distance === "10K")
+    const fiveKRecords = records.filter(r => r.distance === "5K")
 
     if (fullRecords.length > 0) {
       const best = fullRecords.reduce((min, r) => r.finish_time < min.finish_time ? r : min)

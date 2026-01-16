@@ -6,7 +6,9 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "next start",
+    "seed": "npx tsx scripts/seed-dummy-data.ts",
+    "seed:crawl": "npx tsx scripts/crawlers/crawl-all.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -63,10 +65,13 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "@tailwindcss/postcss": "^4.1.9",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.2.3",
+    "playwright": "^1.57.0",
     "postcss": "^8.5",
     "tailwindcss": "^4.1.9",
     "tw-animate-css": "1.3.3",

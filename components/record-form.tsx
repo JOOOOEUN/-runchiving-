@@ -27,11 +27,11 @@ const calculatePace = (hours: string, minutes: string, seconds: string, distance
   const totalSeconds = Number.parseInt(hours || "0") * 3600 + Number.parseInt(minutes || "0") * 60 + Number.parseInt(seconds || "0")
 
   let distanceKm = 0
-  if (distance === "풀코스" || distance === "Full") distanceKm = 42.195
-  else if (distance === "하프" || distance === "Half") distanceKm = 21.0975
+  if (distance === "Full" || distance === "풀코스") distanceKm = 42.195
+  else if (distance === "Half" || distance === "하프") distanceKm = 21.0975
   else if (distance === "10K") distanceKm = 10
   else if (distance === "5K") distanceKm = 5
-  else if (distance === "울트라") distanceKm = 50
+  else if (distance === "Ultra" || distance === "울트라") distanceKm = 50
 
   if (distanceKm === 0 || totalSeconds === 0) return null
 
@@ -295,9 +295,9 @@ export function RecordForm({ registrations, preselectedRegistrationId }: RecordF
                     <SelectContent>
                       <SelectItem value="5K">5K</SelectItem>
                       <SelectItem value="10K">10K</SelectItem>
-                      <SelectItem value="하프">하프 (21.0975K)</SelectItem>
-                      <SelectItem value="풀코스">풀코스 (42.195K)</SelectItem>
-                      <SelectItem value="울트라">울트라 (50K+)</SelectItem>
+                      <SelectItem value="Half">하프 (21.0975K)</SelectItem>
+                      <SelectItem value="Full">풀코스 (42.195K)</SelectItem>
+                      <SelectItem value="Ultra">울트라 (50K+)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
