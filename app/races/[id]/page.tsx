@@ -20,12 +20,15 @@ import {
   Medal,
   Shirt,
   Map,
+  Trophy,
+  ArrowRight,
 } from "lucide-react"
 import { AddToMyRacesButton } from "@/components/add-to-my-races-button"
 import { RaceDetailActions } from "@/components/race-detail-actions"
 import Link from "next/link"
 import Image from "next/image"
 import { parseDistances, getDistanceBadgeStyle } from "@/lib/distance-utils"
+import type { Race, RaceSeries } from "@/lib/types"
 
 export default async function RaceDetailPage({
   params,
@@ -35,11 +38,30 @@ export default async function RaceDetailPage({
   const { id } = await params
   const supabase = await createClient()
 
-  const { data: race, error } = await supabase.from("races").select("*").eq("id", id).single()
+  const { data: race, error } = await supabase
+    .from("races")
+    .select("*, series:race_series(*)")
+    .eq("id", id)
+    .single()
 
   if (error || !race) {
     notFound()
   }
+
+  // 시리즈가 있으면 같은 시리즈의 다른 대회들 가져오기
+  let seriesRaces: Race[] = []
+  if (race.series_id) {
+    const { data } = await supabase
+      .from("races")
+      .select("*")
+      .eq("series_id", race.series_id)
+      .neq("id", race.id)
+      .order("date", { ascending: false })
+      .limit(5)
+    seriesRaces = (data || []) as Race[]
+  }
+
+  const series = race.series as RaceSeries | null
 
   const raceDate = new Date(race.date)
   const formattedDate = raceDate.toLocaleDateString("ko-KR", {
@@ -200,6 +222,46 @@ export default async function RaceDetailPage({
             </div>
           </div>
         </div>
+
+        {/* 시리즈 정보 */}
+        {series && (
+          <Card className="mb-8 border-primary/20 bg-primary/5">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-full bg-primary/10 p-2">
+                    <Trophy className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">정기 대회 시리즈</p>
+                    <p className="font-semibold">{series.name} {series.short_name && `(${series.short_name})`}</p>
+                  </div>
+                </div>
+                <Button asChild variant="ghost" size="sm" className="gap-1">
+                  <Link href={`/races/series/${series.id}`}>
+                    시리즈 보기
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+
+              {seriesRaces.length > 0 && (
+                <div className="mt-4 pt-4 border-t border-primary/10">
+                  <p className="text-sm text-muted-foreground mb-2">이 시리즈의 다른 대회</p>
+                  <div className="flex flex-wrap gap-2">
+                    {seriesRaces.map((r) => (
+                      <Link key={r.id} href={`/races/${r.id}`}>
+                        <Badge variant="outline" className="hover:bg-primary/10 cursor-pointer">
+                          {new Date(r.date).getFullYear()}년
+                        </Badge>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
         {/* 탭 콘텐츠 */}
         <Tabs defaultValue="info" className="w-full">

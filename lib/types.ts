@@ -1,3 +1,15 @@
+export interface RaceSeries {
+  id: string
+  name: string
+  short_name: string | null
+  description: string | null
+  official_url: string | null
+  logo_url: string | null
+  typical_month: number | null
+  typical_distances: string | null
+  created_at: string
+}
+
 export interface Race {
   id: string
   name: string
@@ -22,6 +34,9 @@ export interface Race {
   tshirt_image_url: string | null            // 기념 티셔츠 이미지
   benefits: string | null                    // 참가 혜택/기념품 설명
   schedule: Record<string, string> | null    // {"06:00": "사전접수", "07:00": "출발"}
+  // 시리즈 연결
+  series_id: string | null
+  series?: RaceSeries | null
 }
 
 export interface Profile {

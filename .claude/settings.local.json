@@ -15,7 +15,20 @@
       "Bash(git branch:*)",
       "Bash(ssh-keyscan:*)",
       "Bash(~/.ssh/known_hosts)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(pnpm add:*)",
+      "Bash(npx playwright:*)",
+      "Bash(mkdir:*)",
+      "Bash(npx tsx:*)",
+      "Bash(curl:*)",
+      "Bash(pnpm seed:*)",
+      "Bash(pnpm update:*)",
+      "WebFetch(domain:gorunning.kr)",
+      "WebFetch(domain:roadrun.co.kr)",
+      "WebSearch",
+      "WebFetch(domain:marathongo.co.kr)",
+      "WebFetch(domain:www.seoulhalfmarathon.com)",
+      "WebFetch(domain:rankingmarathon.com)"
     ],
     "deny": [],
     "ask": []

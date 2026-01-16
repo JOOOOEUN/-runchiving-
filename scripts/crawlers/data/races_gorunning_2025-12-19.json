@@ -1,0 +1,472 @@
+[
+  {
+    "name": "전국마라톤",
+    "date": "2025-12-20",
+    "location": "",
+    "distance": "10km",
+    "registration_url": "https://gorunning.kr/races/797/",
+    "organizer": null,
+    "status": "접수마감",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "진주마라톤",
+    "date": "2025-12-21",
+    "location": "",
+    "distance": "하프, 10km, 5km",
+    "registration_url": "https://gorunning.kr/races/735/",
+    "organizer": null,
+    "status": "접수마감",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "맨몸마라톤",
+    "date": "2026-01-01",
+    "location": "",
+    "distance": "7KM, 10km, 5km",
+    "registration_url": "https://gorunning.kr/races/761/",
+    "organizer": null,
+    "status": "접수마감",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "임도런",
+    "date": "2026-01-03",
+    "location": "",
+    "distance": "",
+    "registration_url": "https://gorunning.kr/races/768/",
+    "organizer": null,
+    "status": "접수마감",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "전국마라톤",
+    "date": "2026-01-04",
+    "location": "",
+    "distance": "하프, 10km, 5km",
+    "registration_url": "https://gorunning.kr/races/763/",
+    "organizer": null,
+    "status": "접수마감",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "여수해양마라톤",
+    "date": "2026-01-11",
+    "location": "",
+    "distance": "하프, 10km, 5km, 7km",
+    "registration_url": "https://gorunning.kr/races/755/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "전국마라톤",
+    "date": "2026-01-23",
+    "location": "",
+    "distance": "",
+    "registration_url": "https://gorunning.kr/races/732/",
+    "organizer": null,
+    "status": "접수마감",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "전국마라톤",
+    "date": "2026-01-26",
+    "location": "",
+    "distance": "10km",
+    "registration_url": "https://gorunning.kr/races/756/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "인사이더런",
+    "date": "2026-01-31",
+    "location": "",
+    "distance": "32km, 하프, 10km",
+    "registration_url": "https://gorunning.kr/races/844/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "한국남산우정마라톤",
+    "date": "2026-02-08",
+    "location": "",
+    "distance": "하프, 10km, 5km, 16km, 20km",
+    "registration_url": "https://gorunning.kr/races/764/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "한국마라톤",
+    "date": "2026-02-21",
+    "location": "",
+    "distance": "32.195km, 하프, 10km, 5km",
+    "registration_url": "https://gorunning.kr/races/698/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "경기수원국제하프마라톤",
+    "date": "2026-02-22",
+    "location": "",
+    "distance": "하프, 10km, 5km, 32km",
+    "registration_url": "https://gorunning.kr/races/781/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "전국마라톤",
+    "date": "2026-03-01",
+    "location": "",
+    "distance": "하프, 10km, 5km",
+    "registration_url": "https://gorunning.kr/races/845/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "컬처런",
+    "date": "2026-03-07",
+    "location": "",
+    "distance": "하프, 10km, 5km",
+    "registration_url": "https://gorunning.kr/races/839/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "하프마라톤",
+    "date": "2026-03-08",
+    "location": "",
+    "distance": "하프, 10km, 5km, 30km",
+    "registration_url": "https://gorunning.kr/races/744/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "전국마라톤",
+    "date": "2026-03-14",
+    "location": "",
+    "distance": "하프, 10km, 5km",
+    "registration_url": "https://gorunning.kr/races/799/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "서울마라톤",
+    "date": "2026-03-15",
+    "location": "",
+    "distance": "10km",
+    "registration_url": "https://gorunning.kr/races/697/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "지리산봄꽃레이스",
+    "date": "2026-03-21",
+    "location": "",
+    "distance": "24km",
+    "registration_url": "https://gorunning.kr/races/823/",
+    "organizer": null,
+    "status": "접수마감",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "K마라톤",
+    "date": "2026-03-22",
+    "location": "",
+    "distance": "하프, 10km, 5km",
+    "registration_url": "https://gorunning.kr/races/809/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "하프마라톤",
+    "date": "2026-03-29",
+    "location": "",
+    "distance": "하프, 10km, 5km",
+    "registration_url": "https://gorunning.kr/races/824/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "경주벚꽃마라톤",
+    "date": "2026-04-04",
+    "location": "",
+    "distance": "하프, 10km, 5km",
+    "registration_url": "https://gorunning.kr/races/822/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "더레이스",
+    "date": "2026-04-05",
+    "location": "",
+    "distance": "하프, 10km, 5km",
+    "registration_url": "https://gorunning.kr/races/810/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "서울트레일런",
+    "date": "2026-04-10",
+    "location": "",
+    "distance": "100km, 울트라",
+    "registration_url": "https://gorunning.kr/races/815/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "양천마라톤",
+    "date": "2026-04-11",
+    "location": "",
+    "distance": "하프, 10km, 5km, 울트라, 100km",
+    "registration_url": "https://gorunning.kr/races/789/",
+    "organizer": null,
+    "status": "접수전",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "하프마라톤",
+    "date": "2026-04-12",
+    "location": "",
+    "distance": "하프, 10km, 5km, 12km",
+    "registration_url": "https://gorunning.kr/races/835/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "선셋마라톤",
+    "date": "2026-04-18",
+    "location": "",
+    "distance": "하프, 10km, 3km",
+    "registration_url": "https://gorunning.kr/races/838/",
+    "organizer": null,
+    "status": "접수마감",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "기장바다마라톤",
+    "date": "2026-04-19",
+    "location": "",
+    "distance": "하프, 10km, 3km, 5km",
+    "registration_url": "https://gorunning.kr/races/702/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "성지순례222KM울트라마라톤",
+    "date": "2026-04-24",
+    "location": "",
+    "distance": "222KM, 울트라, 101KM",
+    "registration_url": "https://gorunning.kr/races/831/",
+    "organizer": null,
+    "status": "접수전",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "서울하프마라톤",
+    "date": "2026-04-26",
+    "location": "",
+    "distance": "하프, 10km, 5km",
+    "registration_url": "https://gorunning.kr/races/783/",
+    "organizer": null,
+    "status": "접수마감",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "한국산악마라톤",
+    "date": "2026-05-03",
+    "location": "",
+    "distance": "13km",
+    "registration_url": "https://gorunning.kr/races/710/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "한밭울트라마라톤",
+    "date": "2026-05-09",
+    "location": "",
+    "distance": "울트라, 100km, 50km",
+    "registration_url": "https://gorunning.kr/races/827/",
+    "organizer": null,
+    "status": "접수전",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "서울시민마라톤",
+    "date": "2026-05-10",
+    "location": "",
+    "distance": "하프, 10km, 5km",
+    "registration_url": "https://gorunning.kr/races/699/",
+    "organizer": null,
+    "status": "접수마감",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "서울한강울트라마라톤",
+    "date": "2026-05-16",
+    "location": "",
+    "distance": "100km, 울트라, 50km",
+    "registration_url": "https://gorunning.kr/races/829/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "한국산악마라톤",
+    "date": "2026-05-24",
+    "location": "",
+    "distance": "48km, 40km",
+    "registration_url": "https://gorunning.kr/races/765/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "삼삼트레일런",
+    "date": "2026-05-30",
+    "location": "",
+    "distance": "33Km",
+    "registration_url": "https://gorunning.kr/races/840/",
+    "organizer": null,
+    "status": "접수마감",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "1222트레일러닝",
+    "date": "2026-06-06",
+    "location": "",
+    "distance": "15km",
+    "registration_url": "https://gorunning.kr/races/746/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "국제마라톤",
+    "date": "2026-06-07",
+    "location": "",
+    "distance": "하프, 10km, 5km, 3km",
+    "registration_url": "https://gorunning.kr/races/700/",
+    "organizer": null,
+    "status": "접수전",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "전국마라톤",
+    "date": "2026-06-14",
+    "location": "",
+    "distance": "하프, 10km, 5km",
+    "registration_url": "https://gorunning.kr/races/737/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "죽령트레일런",
+    "date": "2026-06-21",
+    "location": "",
+    "distance": "28km",
+    "registration_url": "https://gorunning.kr/races/812/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "한국산악마라톤",
+    "date": "2026-07-05",
+    "location": "",
+    "distance": "11km",
+    "registration_url": "https://gorunning.kr/races/801/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "트레일러닝",
+    "date": "2026-07-12",
+    "location": "",
+    "distance": "40km",
+    "registration_url": "https://gorunning.kr/races/705/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "한국산악마라톤",
+    "date": "2026-08-15",
+    "location": "",
+    "distance": "48km, 40km",
+    "registration_url": "https://gorunning.kr/races/817/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "한국산악마라톤",
+    "date": "2026-09-03",
+    "location": "",
+    "distance": "27km",
+    "registration_url": "https://gorunning.kr/races/802/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "한국산악마라톤",
+    "date": "2026-09-06",
+    "location": "",
+    "distance": "26km",
+    "registration_url": "https://gorunning.kr/races/847/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "힐링마라톤",
+    "date": "2026-09-13",
+    "location": "",
+    "distance": "하프, 10km, 5km",
+    "registration_url": "https://gorunning.kr/races/738/",
+    "organizer": null,
+    "status": "접수중",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "흥타령울트라마라톤",
+    "date": "2026-10-10",
+    "location": "",
+    "distance": "울트라, 100km, 60km",
+    "registration_url": "https://gorunning.kr/races/830/",
+    "organizer": null,
+    "status": "접수전",
+    "source": "gorunning.kr"
+  },
+  {
+    "name": "청원생명쌀대청호마라톤",
+    "date": "2026-10-17",
+    "location": "",
+    "distance": "하프, 10km, 5km",
+    "registration_url": "https://gorunning.kr/races/848/",
+    "organizer": null,
+    "status": "접수전",
+    "source": "gorunning.kr"
+  }
+]
